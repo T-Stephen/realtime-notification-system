@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time Notification Engine | Live Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-branding">
+        <div class="logo-icon">
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <div>
+          <h1>Real-Time Notification Engine</h1>
+          <p class="subtitle">Event-Driven WebSocket Client • Redis Pub/Sub</p>
+        </div>
+      </div>
+      
+      <div class="header-status">
+        <div id="status-badge" class="status-badge disconnected">
+          <span class="status-dot"></span>
+          <span id="status-text">Disconnected</span>
+        </div>
+        <div class="counter-badge" title="Total notifications received">
+          <i class="fa-solid fa-bell"></i>
+          <span id="total-count">0</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="toolbar">
+      <div class="connection-group">
+        <label for="server-url"><i class="fa-solid fa-link"></i> Socket Server:</label>
+        <input 
+          type="text" 
+          id="server-url" 
+          placeholder="http://localhost:3000" 
+          value="http://localhost:3000" 
+        />
+        <button id="btn-connect" class="btn btn-primary">
+          <i class="fa-solid fa-plug"></i> Connect
+        </button>
+      </div>
+
+      <div class="actions-group">
+        <button id="btn-pause" class="btn btn-secondary" title="Pause or resume incoming display">
+          <i class="fa-solid fa-pause"></i> <span id="pause-text">Pause Feed</span>
+        </button>
+        <button id="btn-clear" class="btn btn-secondary" title="Clear all rendered notifications">
+          <i class="fa-solid fa-trash-can"></i> Clear Feed
+        </button>
+        <button id="btn-test" class="btn btn-secondary" title="Simulate a local test event">
+          <i class="fa-solid fa-vial"></i> Test Event
+        </button>
+      </div>
+    </section>
+
+    <main class="main-grid">
+      <section class="card notification-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-wave-square"></i> Live Notification Feed</h2>
+          <span class="badge-tag">Stream Active</span>
+        </div>
+
+        <div id="notifications-container" class="notifications-list">
+          <div id="empty-state" class="empty-state">
+            <div class="empty-icon">
+              <i class="fa-regular fa-bell-slash"></i>
+            </div>
+            <h3>Waiting for incoming events...</h3>
+            <p>Connect to the WebSocket server to begin streaming real-time notifications.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card console-card">
+        <div class="card-header">
+          <h2><i class="fa-solid fa-terminal"></i> Console Log & Raw Socket Stream</h2>
+          <button id="btn-clear-console" class="btn-icon" title="Clear console output">
+            <i class="fa-solid fa-eraser"></i>
+          </button>
+        </div>
+        
+        <div class="terminal-body" id="console-output">
+          <div class="console-line system">[SYSTEM] Frontend initialized. Awaiting socket connection...</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Cipher Schools Interim Project • Developed by <strong>Harsh Handoor</strong> (Frontend), <strong>Stephen Raj</strong>, and <strong>Arnav</strong></p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

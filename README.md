@@ -22,4 +22,33 @@ Developed as an interim submission for the Cipher Schools Campus Ambassador Prog
 
 * **Stephen Raj** - Team Lead & Data Architecture
 * **Arnav** - Backend Developer (Node.js & Socket.io)
-* **Harsh Handoor** - Frontend Developer (Client WebSockets)
+* **Harsh Handore** - Frontend Developer (Client WebSockets)
+
+---
+
+## 📁 Project Structure
+
+```text
+realtime-notification-system/
+├── frontend/             # Frontend UI (HTML5, CSS3, Vanilla JS + Socket.io)
+│   ├── index.html        # Live notification dashboard & feed
+│   ├── style.css         # Modern UI styles
+│   └── app.js            # WebSocket client & event renderer
+├── publisher/            # Redis Event Publisher
+│   ├── package.json
+│   └── publisher.js      # Simulates event generation to Redis Pub/Sub
+└── README.md
+```
+
+## 🚀 Quick Start Guide
+
+### 1. Start the Publisher
+```bash
+cd publisher
+npm install
+node publisher.js
+```
+
+### 2. Open the Frontend Dashboard
+* Open [`frontend/index.html`](frontend/index.html) in your browser.
+* Point the socket server URL in the UI to your Socket.io backend instance (e.g. `http://localhost:3000`) and click **Connect**.

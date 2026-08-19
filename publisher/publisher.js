@@ -1,6 +1,5 @@
 const { createClient } = require('redis');
 
-// We will replace this with your actual Upstash Connection URL
 const REDIS_URL = 'rediss://default:gQAAAAAAAmq1AAIgcDFjMTMxYzA4YzBiMWE0NGQwODAzN2M0OGQzMGE5Y2U0NQ@valid-ferret-158389.upstash.io:6379';
 
 const client = createClient({
@@ -15,7 +14,6 @@ async function startPublisher() {
 
   let counter = 1;
 
-  // This simulates the backend sending a new notification every 5 seconds
   setInterval(async () => {
     const notification = JSON.stringify({
       id: counter,
