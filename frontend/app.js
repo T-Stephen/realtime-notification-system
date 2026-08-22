@@ -41,8 +41,9 @@ function updateStatus(status, text) {
 function displayNotification(data) {
   if (state.isPaused) return;
 
-  if (emptyState && emptyState.parentElement) {
-    emptyState.remove();
+  const currentEmptyState = document.getElementById('empty-state');
+  if (currentEmptyState) {
+    currentEmptyState.remove();
   }
 
   let id = '#';
@@ -135,13 +136,34 @@ function initSocket() {
       logToTerminal(`Connection error: ${error.message}`, 'error');
     });
 
-    state.socket.on('notification', (data) => handleIncomingNotification(data, 'notification'));
-    state.socket.on('notifications_channel', (data) => handleIncomingNotification(data, 'notifications_channel'));
-    state.socket.on('message', (data) => handleIncomingNotification(data, 'message'));
-    state.socket.on('alert', (data) => handleIncomingNotification(data, 'alert'));
+    // Explicit listeners for all standard backend event formats
+    const eventsToListen = [
+      'new_notification',
+      'notification',
+      'notifications_channel',
+      'system_events',
+      'message',
+      'alert',
+      'broadcast'
+    ];
 
+    eventsToListen.forEach((evt) => {
+      state.socket.on(evt, (data) => handleIncomingNotification(data, evt));
+    });
+
+    // Reconnection lifecycle events
+    state.socket.io.on('reconnect_attempt', (attempt) => {
+      updateStatus('connecting', `Reconnecting (${attempt})...`);
+    });
+
+    state.socket.io.on('reconnect', () => {
+      updateStatus('connected', 'Connected');
+      logToTerminal(`Reconnected to server! Socket ID: ${state.socket.id}`, 'success');
+    });
+
+    // Fallback catch-all for any other custom event names
+    const explicitEvents = [...eventsToListen, 'connect', 'disconnect', 'connect_error'];
     state.socket.onAny((eventName, ...args) => {
-      const explicitEvents = ['notification', 'notifications_channel', 'message', 'alert', 'connect', 'disconnect'];
       if (!explicitEvents.includes(eventName)) {
         args.forEach((payload) => handleIncomingNotification(payload, eventName));
       }
@@ -215,5 +237,8 @@ btnTest.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
+  if (window.location.protocol.startsWith('http') && window.location.origin && window.location.origin !== 'null') {
+    serverUrlInput.value = window.location.origin;
+  }
   initSocket();
 });
